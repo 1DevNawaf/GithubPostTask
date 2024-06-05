@@ -1,16 +1,20 @@
 package com.example.postapptask.presentation.home
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.postapptask.data.model.GithubPost
-import com.example.postapptask.data.remote.githubPostApiService
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import com.example.postapptask.data.model.GithubPostItem
+import com.example.postapptask.domain.github.usecase.GetGithubReposUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val getGithubReposUseCase: GetGithubReposUseCase
+) : ViewModel() {
     private val _postState = mutableStateOf(GithubPostState())
     val postState : State<GithubPostState> = _postState
 
@@ -19,27 +23,32 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun fetchGithubPosts(){
-        viewModelScope.launch {
-            try {
-                val response = githubPostApiService.getGithubPosts()
-                _postState.value = _postState.value.copy(
-                    list = response,
+//        viewModelScope.launch {
+//            try {
+//                val response = githubPostApiService.getGithubPosts()
+//                _postState.value = _postState.value.copy(
+//                    list = response,
+//                    isLoading = false
+//                )
+//            } catch (e: HttpException) {
+//                Log.e("HomeViewModel", "HttpException: ${e.message}")
+//                _postState.value = _postState.value.copy(isLoading = false)
+//            } catch (e: Exception) {
+//                Log.e("HomeViewModel", "Exception: ${e.message}")
+//                _postState.value = _postState.value.copy(isLoading = false)
+//            }
+//        }
+
+        getGithubReposUseCase().onEach {
+            _postState.value = _postState.value.copy(
+                    list = it,
                     isLoading = false
-                )
-            } catch (e: HttpException) {
-                Log.e("HomeViewModel", "HttpException: ${e.message}")
-                // Handle the error
-                _postState.value = _postState.value.copy(isLoading = false)
-            } catch (e: Exception) {
-                Log.e("HomeViewModel", "Exception: ${e.message}")
-                // Handle the error
-                _postState.value = _postState.value.copy(isLoading = false)
-            }
-        }
+            )
+        }.launchIn(viewModelScope)
     }
     data class GithubPostState(
         val isLoading : Boolean = true,
-        val list: List<GithubPost> = emptyList()
+        val list: List<GithubPostItem>? = null
     )
 
 }
