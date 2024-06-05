@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.postapptask.common.utils.Response
 import com.example.postapptask.data.model.GithubPostItem
 import com.example.postapptask.domain.github.usecase.GetGithubReposUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,11 +40,20 @@ class HomeViewModel @Inject constructor(
 //            }
 //        }
 
-        getGithubReposUseCase().onEach {
-            _postState.value = _postState.value.copy(
-                    list = it,
-                    isLoading = false
-            )
+        getGithubReposUseCase().onEach {response ->
+            when (response){
+                is Response.Loading -> {
+                    _postState.value = _postState.value.copy(
+                        isLoading = response.status
+                    )
+                }
+                is Response.Success -> {
+                    _postState.value = _postState.value.copy(
+                        list = response.data
+                    )
+                }
+                is Response.Error -> {}
+            }
         }.launchIn(viewModelScope)
     }
     data class GithubPostState(
