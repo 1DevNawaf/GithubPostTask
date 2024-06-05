@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -63,4 +64,21 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Compose ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    //Retrofit
+    implementation (libs.retrofit)
+
+    //Json To Kotlin mapping
+    implementation(libs.converter.gson)
+
+    //Coil
+    implementation(libs.coil.compose)
+
+    // ROOM
+    implementation (libs.androidx.room.runtime)
+    implementation (libs.androidx.room.ktx)
+
 }
