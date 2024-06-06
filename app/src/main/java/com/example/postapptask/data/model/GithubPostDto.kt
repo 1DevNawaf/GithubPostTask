@@ -35,4 +35,7 @@ data class GithubPostItem(
     @field:SerializedName("owner")
     val owner: Owner? = null,
 
+    @field:SerializedName("html_url")
+    val htmlUrl: String? = null,
+
 )
