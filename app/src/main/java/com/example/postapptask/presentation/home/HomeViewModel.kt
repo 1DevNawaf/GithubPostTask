@@ -36,7 +36,9 @@ class HomeViewModel @Inject constructor(
                         list = response.data
                     )
                 }
-                is Response.Error -> {}
+                is Response.Error -> {
+
+                }
             }
         }.launchIn(viewModelScope)
     }

@@ -15,7 +15,4 @@ object ApiModule {
     @Singleton
     fun provideGithubPostApi(retrofit: Retrofit): GitHubApi = retrofit.create(GitHubApi :: class.java)
 
-//    @Provides
-//    @Singleton
-//    fun provideGithubPostDao(retrofit: Retrofit): GithubPostDao = retrofit.create(GitHubApi :: class.java)
 }

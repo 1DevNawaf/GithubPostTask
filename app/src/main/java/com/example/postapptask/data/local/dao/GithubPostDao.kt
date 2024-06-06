@@ -14,6 +14,8 @@ interface GithubPostDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPost(githubPostEntity: GithubPostEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addPost(githubPostEntity: List<GithubPostEntity>)
     @Query("SELECT * FROM `github_post_table`")
     fun getAllPosts(): Flow<List<GithubPostEntity>>
     @Query("SELECT * FROM `github_post_table` WHERE postId=:id")
