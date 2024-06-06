@@ -82,6 +82,7 @@ dependencies {
     // ROOM
     implementation (libs.androidx.room.runtime)
     implementation (libs.androidx.room.ktx)
+    kapt(libs.room.compiler)
 
     // Dagger - Hilt with navigation compose
     implementation ("com.google.dagger:hilt-android:2.49")

@@ -24,22 +24,6 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchGithubPosts(){
-//        viewModelScope.launch {
-//            try {
-//                val response = githubPostApiService.getGithubPosts()
-//                _postState.value = _postState.value.copy(
-//                    list = response,
-//                    isLoading = false
-//                )
-//            } catch (e: HttpException) {
-//                Log.e("HomeViewModel", "HttpException: ${e.message}")
-//                _postState.value = _postState.value.copy(isLoading = false)
-//            } catch (e: Exception) {
-//                Log.e("HomeViewModel", "Exception: ${e.message}")
-//                _postState.value = _postState.value.copy(isLoading = false)
-//            }
-//        }
-
         getGithubReposUseCase().onEach {response ->
             when (response){
                 is Response.Loading -> {
