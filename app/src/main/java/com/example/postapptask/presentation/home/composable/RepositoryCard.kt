@@ -83,7 +83,7 @@ fun RepositoryCard(
                 .align(Alignment.TopCenter)
         )
 
-        // IconButton
+
         IconButton(
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ownerPage))

@@ -20,12 +20,20 @@ val githubDivider = Color(0xFF444D56)
 
 
 val githubDarkGray = Color(0xFF24292E)
+val githubDarkBlue = Color(0x0d1419)
 val githubLighterGray = Color(0xFF2F363D)
 val githubLighterBlueGray = Color(0xFF2D4257)
 val githubLighterBlue = Color(0xFF2188FF)
 val githubGreen = Color(0xFF28A745)
 
 val githubGradientBrush = Brush.verticalGradient(
+    colors = listOf(
+        githubDarkGray,
+        githubLighterGray
+    )
+)
+
+val githubTopAppBarBrush = Brush.horizontalGradient(
     colors = listOf(
         githubBackground,
         githubLighterBlueGray
