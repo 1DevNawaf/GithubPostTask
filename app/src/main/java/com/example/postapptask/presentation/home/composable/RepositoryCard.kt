@@ -63,12 +63,12 @@ fun RepositoryCard(
             ) {
                 Text(
                     text = ownerName,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = ownerInfo,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
         }
