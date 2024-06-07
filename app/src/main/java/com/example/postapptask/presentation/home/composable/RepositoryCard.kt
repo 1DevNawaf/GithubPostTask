@@ -29,15 +29,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.postapptask.R
+import com.example.postapptask.data.model.GithubPostItem
+import com.example.postapptask.presentation.navigation.screen.Screen
 
 @Composable
 fun RepositoryCard(
-    imageUrl: String,
-    ownerName: String,
-    ownerInfo: String,
-    ownerPage:String
+    repo: GithubPostItem,
+    navController: NavController
 ) {
     val context = LocalContext.current
     Box(
@@ -50,7 +51,12 @@ fun RepositoryCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 40.dp)
-                .clickable {  }, // Padding to accommodate the circular image
+                .clip(shape = RoundedCornerShape(16.dp))
+                .clickable {
+                    navController.navigate(route = Screen.Details.route)
+                    navController.currentBackStackEntry?.savedStateHandle
+                        ?.set("githubPostItem",repo)
+                },
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.background
@@ -62,19 +68,19 @@ fun RepositoryCard(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = ownerName,
+                    text = repo.owner?.login.toString(),
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = ownerInfo,
+                    text = repo.name.toString(),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
         }
 
         Image(
-            painter = rememberAsyncImagePainter(imageUrl),
+            painter = rememberAsyncImagePainter(repo.owner?.avatarUrl),
             contentDescription = "User Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -86,7 +92,7 @@ fun RepositoryCard(
 
         IconButton(
             onClick = {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ownerPage))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(repo.owner?.url))
                 context.startActivity(intent)
             },
             modifier = Modifier

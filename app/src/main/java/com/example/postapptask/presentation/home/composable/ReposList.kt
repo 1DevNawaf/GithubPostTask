@@ -15,10 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.postapptask.data.model.GithubPostItem
 
 @Composable
-fun ReposList(reposList: List<GithubPostItem>?) {
+fun ReposList(reposList: List<GithubPostItem>?, navController: NavController) {
     val scrollState = rememberLazyListState()
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -29,11 +30,7 @@ fun ReposList(reposList: List<GithubPostItem>?) {
     ) {
         if (reposList!=null){
             items(items = reposList){repo->
-                RepositoryCard(imageUrl =repo.owner?.avatarUrl.toString(),
-                    ownerName =repo.owner?.login.toString(),
-                    ownerInfo = repo.name.toString(),
-                    ownerPage = repo.htmlUrl.toString()
-                )
+                RepositoryCard(repo = repo, navController = navController)
             }
             item (key = 1){
                 CircularProgressIndicator(color = Color.White)
