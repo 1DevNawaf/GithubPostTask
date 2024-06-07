@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -32,6 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.postapptask.R
+import com.example.postapptask.common.theme.githubDarkBlue
+import com.example.postapptask.common.theme.githubTextPrimary
+import com.example.postapptask.common.theme.githubTextSecondary
 import com.example.postapptask.data.model.GithubPostItem
 import com.example.postapptask.presentation.navigation.screen.Screen
 
@@ -59,7 +61,7 @@ fun RepositoryCard(
                 },
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.background
+                containerColor = githubDarkBlue
             )
         ) {
             Column(
@@ -69,12 +71,12 @@ fun RepositoryCard(
             ) {
                 Text(
                     text = repo.owner?.login.toString(),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge.copy(color = githubTextPrimary)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = repo.name.toString(),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium.copy(color = githubTextSecondary)
                 )
             }
         }
@@ -102,7 +104,7 @@ fun RepositoryCard(
             Icon(
                 painter = painterResource(id = R.drawable.github),
                 contentDescription = "Open URL",
-                tint = Color.White
+                tint = githubTextSecondary
             )
         }
     }

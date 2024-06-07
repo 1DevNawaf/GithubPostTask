@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.postapptask.common.composable.GithubPostAppBar
+import com.example.postapptask.common.theme.githubDarkBlue
 import com.example.postapptask.common.theme.githubGradientBrush
 import com.example.postapptask.presentation.details.composable.CustomIconButton
 import com.example.postapptask.presentation.details.composable.DetailsCard
@@ -30,7 +30,7 @@ fun DetailsScreen(navController: NavHostController,viewModel: DetailsViewModel) 
         GithubPostAppBar(
             title = "Repository Details",
             subtitle = "Elegantly Present Your Repositories",
-            color = MaterialTheme.colorScheme.background
+            color = githubDarkBlue
         )
         Box(
             modifier = Modifier

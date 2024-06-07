@@ -21,6 +21,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.postapptask.R
+import com.example.postapptask.common.theme.githubTextPrimary
+import com.example.postapptask.common.theme.githubTextSecondary
 
 @Composable
 fun GithubPostAppBar(title: String,subtitle: String,color: Color) {
@@ -33,14 +35,14 @@ fun GithubPostAppBar(title: String,subtitle: String,color: Color) {
             .padding(top = 40.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
         Column {
-            Text(text = title, style = TextStyle(fontSize = 25.sp, color = Color.White))
+            Text(text = title, style = TextStyle(fontSize = 25.sp, color = githubTextPrimary))
             Row(Modifier.padding(top = 16.dp)) {
-                Text(text = subtitle, style = TextStyle(fontSize = 16.sp, color = Color.White))
+                Text(text = subtitle, style = TextStyle(fontSize = 16.sp, color = githubTextSecondary))
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.code), // Replace with your actual icon resource
                     contentDescription = "Open URL",
-                    tint = Color.White,
+                    tint = githubTextSecondary,
                     modifier = Modifier.size(25.dp)
                 )
             }

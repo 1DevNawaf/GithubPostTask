@@ -20,7 +20,7 @@ val githubDivider = Color(0xFF444D56)
 
 
 val githubDarkGray = Color(0xFF24292E)
-val githubDarkBlue = Color(0x0d1419)
+val githubDarkBlue = Color(0xFF131B24)
 val githubLighterGray = Color(0xFF2F363D)
 val githubLighterBlueGray = Color(0xFF2D4257)
 val githubLighterBlue = Color(0xFF2188FF)

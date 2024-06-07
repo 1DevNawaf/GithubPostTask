@@ -18,6 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.example.postapptask.common.theme.githubDarkBlue
+import com.example.postapptask.common.theme.githubTextPrimary
+import com.example.postapptask.common.theme.githubTextSecondary
 import com.example.postapptask.data.model.GithubPostItem
 
 @Composable
@@ -29,7 +32,7 @@ fun DetailsCard(repo: GithubPostItem?) {
             .clip(shape = RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = githubDarkBlue
         )
     ) {
         Column(
@@ -42,7 +45,7 @@ fun DetailsCard(repo: GithubPostItem?) {
             Spacer(modifier = Modifier.height(18.dp))
             Text(
                 text = repo?.owner?.login.toString(),
-                style = MaterialTheme.typography.displayMedium
+                style = MaterialTheme.typography.displayMedium.copy(color = githubTextPrimary)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Column(
@@ -52,12 +55,12 @@ fun DetailsCard(repo: GithubPostItem?) {
             ) {
                 Text(
                     text = "${repo?.name.toString()}: ",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge.copy(color = githubTextPrimary)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = repo?.description ?: "No description provided",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium.copy(color = githubTextSecondary)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 RepoInfoText("Repository ID",repo?.id.toString())
