@@ -33,11 +33,9 @@ fun ReposList(reposList: List<GithubPostItem>, navController: NavController,view
         items(items = reposList){repo->
             RepositoryCard(repo = repo, navController = navController)
         }
-        item (key = 1){
-            viewModel.postState.value.paginationErrorText?.let {
-                Text(text = "No more repos", color = Color.White)
-            } ?: CircularProgressIndicator(color = Color.White)
-        }
+        viewModel.postState.value.paginationErrorText?.let {
+            item { Text(text = it, color = Color.White) }
+        } ?: item (key = 1){ CircularProgressIndicator(color = Color.White) }
     }
     LaunchedEffect(reposList) {
         snapshotFlow { scrollState.layoutInfo.visibleItemsInfo }
@@ -45,7 +43,7 @@ fun ReposList(reposList: List<GithubPostItem>, navController: NavController,view
                 if (reposList.isEmpty()) return@collect
 
                 if (it.last().key == 1){
-                    delay(5000)
+                    delay(3000)
                     viewModel.goNextPage()
                 }
             }

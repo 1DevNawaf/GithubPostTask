@@ -34,40 +34,49 @@ class HomeViewModel @Inject constructor(
             when (response){
                 is Response.Loading -> {
                     _postState.value = _postState.value.copy(
-                        firstCallErrorText = null
+                        firstCallErrorText = null,
+                        paginationOnProgress = true
                     )
                 }
                 is Response.Success -> {
-                    val githubPostEntityList : MutableList<GithubPostEntity> = mutableListOf()
-                    for (entity in response.data){
-                        if (entity.id != null) githubPostEntityList.add(GithubPostEntity(postId = entity.id, githubPostItem = entity))
-                    }
-                    saveGithubReposUseCase(githubPostEntityList)
-
-                    _postState.value = _postState.value.copy(
-                        list = _postState.value.list + response.data,
-                        paginationOnProgress = false
-                    )
-                    Log.d("Me",githubPostEntityList.toString())
+                    if(response.data.isEmpty()) onError(Response.Error(1000, "No more data"))
+                    else onSuccess(response.data)
                 }
                 is Response.Error -> {
-                    Log.d("Response","Error message: ${response.errorMsg} Error code: ${response.errorCode}")
-                    val localList = getLocalGithubReposUseCase()
-                    _postState.value = _postState.value.copy(
-                        list = localList,
-                        paginationErrorText = if (_postState.value.currentPageNumber > 1) response.errorMsg else null,
-                        firstCallErrorText = if (_postState.value.currentPageNumber == 1) response.errorMsg else null
-                    )
+                    onError(response)
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    fun goNextPage(){
+    private suspend fun onSuccess(data: List<GithubPostItem>){
+        val githubPostEntityList : MutableList<GithubPostEntity> = mutableListOf()
+        for (entity in data){
+            if (entity.id != null) githubPostEntityList.add(GithubPostEntity(postId = entity.id, githubPostItem = entity))
+        }
+        saveGithubReposUseCase(githubPostEntityList)
+
         _postState.value = _postState.value.copy(
-            paginationOnProgress = true,
-            currentPageNumber = _postState.value.currentPageNumber+1
+            list = _postState.value.list + data,
+            paginationOnProgress = false
         )
+    }
+
+    private suspend fun onError(response: Response.Error<List<GithubPostItem>>){
+        val errorMsg = response.errorMsg.ifEmpty { "Unknown Error" }
+        Log.d("Response","Error message: $errorMsg Error code: ${response.errorCode}")
+        val localList = getLocalGithubReposUseCase()
+        _postState.value = _postState.value.copy(
+            list = localList,
+            paginationErrorText = errorMsg,
+            firstCallErrorText = errorMsg
+        )
+    }
+
+
+    fun goNextPage(){
+        if (_postState.value.paginationOnProgress) return
+        _postState.value = _postState.value.copy(currentPageNumber = _postState.value.currentPageNumber+1)
         fetchGithubPosts()
     }
 
@@ -79,6 +88,5 @@ class HomeViewModel @Inject constructor(
         val paginationErrorText: String? = null,
         val currentPageNumber: Int = 1
     )
-
 }
 
