@@ -10,9 +10,9 @@ import javax.inject.Inject
 class GetGithubReposUseCase @Inject constructor(
     private val githubRepository: GithubRepository
 ) {
-    operator fun invoke(): Flow<Response<List<GithubPostItem>>> = flow{
+    operator fun invoke(pageNumber: Int = 1,itemPerPage: Int = 5): Flow<Response<List<GithubPostItem>>> = flow{
         emit(Response.Loading(status = true))
-        val response = githubRepository.getGithubRepos()
+        val response = githubRepository.getGithubRepos(pageNumber = pageNumber, itemPerPage)
         emit(Response.Loading(status = false))
         emit(response)
     }

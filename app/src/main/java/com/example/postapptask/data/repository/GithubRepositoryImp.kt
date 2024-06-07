@@ -10,9 +10,9 @@ import javax.inject.Inject
 class GithubRepositoryImp @Inject constructor(
     private val gitHubApi: GitHubApi
 ) : GithubRepository {
-    override suspend fun getGithubRepos(): Response<List<GithubPostItem>> {
+    override suspend fun getGithubRepos(pageNumber: Int, itemPerPage: Int): Response<List<GithubPostItem>> {
         try {
-            val data=gitHubApi.getGithubPosts()
+            val data=gitHubApi.getGithubPosts(pageNumber = pageNumber, itemsPerPage = itemPerPage)
             return Response.Success(data)
         }catch (e: HttpException){
             return Response.Error(e.code(),e.message())

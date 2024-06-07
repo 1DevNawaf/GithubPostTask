@@ -59,9 +59,13 @@ class HomeViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
+
     data class GithubPostState(
         val isLoading : Boolean = true,
-        val list: List<GithubPostItem>? = null
+        val list: List<GithubPostItem>? = null,
+        val paginationStatus: Boolean = false,
+        val currentPageNumber: Int = 1
     )
 
 }
