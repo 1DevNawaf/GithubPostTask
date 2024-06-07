@@ -30,11 +30,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchGithubPosts(){
-        getGithubReposUseCase().onEach {response ->
+        getGithubReposUseCase(pageNumber = _postState.value.currentPageNumber).onEach {response ->
             when (response){
                 is Response.Loading -> {
                     _postState.value = _postState.value.copy(
-                        isLoading = response.status
+                        firstCallErrorText = null
                     )
                 }
                 is Response.Success -> {
@@ -42,29 +42,41 @@ class HomeViewModel @Inject constructor(
                     for (entity in response.data){
                         if (entity.id != null) githubPostEntityList.add(GithubPostEntity(postId = entity.id, githubPostItem = entity))
                     }
+                    saveGithubReposUseCase(githubPostEntityList)
 
                     _postState.value = _postState.value.copy(
-                        list = response.data
+                        list = _postState.value.list + response.data,
+                        paginationOnProgress = false
                     )
                     Log.d("Me",githubPostEntityList.toString())
-                    saveGithubReposUseCase(githubPostEntityList)
                 }
                 is Response.Error -> {
                     Log.d("Response","Error message: ${response.errorMsg} Error code: ${response.errorCode}")
                     val localList = getLocalGithubReposUseCase()
                     _postState.value = _postState.value.copy(
-                        list = localList
+                        list = localList,
+                        paginationErrorText = if (_postState.value.currentPageNumber > 1) response.errorMsg else null,
+                        firstCallErrorText = if (_postState.value.currentPageNumber == 1) response.errorMsg else null
                     )
                 }
             }
         }.launchIn(viewModelScope)
     }
 
+    fun goNextPage(){
+        _postState.value = _postState.value.copy(
+            paginationOnProgress = true,
+            currentPageNumber = _postState.value.currentPageNumber+1
+        )
+        fetchGithubPosts()
+    }
+
 
     data class GithubPostState(
-        val isLoading : Boolean = true,
-        val list: List<GithubPostItem>? = null,
-        val paginationStatus: Boolean = false,
+        val firstCallErrorText : String? = null,
+        val list: List<GithubPostItem> = emptyList(),
+        val paginationOnProgress: Boolean = false,
+        val paginationErrorText: String? = null,
         val currentPageNumber: Int = 1
     )
 

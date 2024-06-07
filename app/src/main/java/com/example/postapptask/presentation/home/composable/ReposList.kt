@@ -1,6 +1,5 @@
 package com.example.postapptask.presentation.home.composable
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
@@ -17,34 +17,36 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.postapptask.data.model.GithubPostItem
+import com.example.postapptask.presentation.home.HomeViewModel
+import kotlinx.coroutines.delay
 
 @Composable
-fun ReposList(reposList: List<GithubPostItem>?, navController: NavController) {
+fun ReposList(reposList: List<GithubPostItem>, navController: NavController,viewModel: HomeViewModel) {
     val scrollState = rememberLazyListState()
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.Top),
         state = scrollState,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (reposList!=null){
-            items(items = reposList){repo->
-                RepositoryCard(repo = repo, navController = navController)
-            }
-            item (key = 1){
-                CircularProgressIndicator(color = Color.White)
-            }
+        items(items = reposList){repo->
+            RepositoryCard(repo = repo, navController = navController)
         }
-
+        item (key = 1){
+            viewModel.postState.value.paginationErrorText?.let {
+                Text(text = "No more repos", color = Color.White)
+            } ?: CircularProgressIndicator(color = Color.White)
+        }
     }
     LaunchedEffect(reposList) {
         snapshotFlow { scrollState.layoutInfo.visibleItemsInfo }
             .collect {
-                if (reposList == null) return@collect
+                if (reposList.isEmpty()) return@collect
 
                 if (it.last().key == 1){
-                    Log.d("MeTest",it.toString())
+                    delay(5000)
+                    viewModel.goNextPage()
                 }
             }
     }
