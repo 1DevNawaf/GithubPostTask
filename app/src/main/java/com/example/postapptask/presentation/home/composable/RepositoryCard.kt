@@ -92,7 +92,7 @@ fun RepositoryCard(
 
         IconButton(
             onClick = {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(repo.owner?.url))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(repo.htmlUrl))
                 context.startActivity(intent)
             },
             modifier = Modifier

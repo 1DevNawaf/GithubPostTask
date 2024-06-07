@@ -20,8 +20,4 @@ class GithubRepositoryImp @Inject constructor(
             return Response.Error(e.hashCode(),e.message.toString())
         }
     }
-
-    override suspend fun saveGithubRepos(list: List<GithubPostItem>) {
-        TODO("Not yet implemented")
-    }
 }
